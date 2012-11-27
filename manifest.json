@@ -1,0 +1,10 @@
+{
+  "name": "Lantern Chrome Extension",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Allows interaction with Lantern through Google Chrome",
+  "browser_action": {
+    "default_icon": "icon-default.png",
+    "default_popup": "popup.html"
+  }
+}
