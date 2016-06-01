@@ -1,10 +1,24 @@
 {
-  "name": "Lantern Chrome Extension",
-  "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Allows interaction with Lantern through Google Chrome",
+
+  "name": "Lantern",
+  "description": "Interacts with the Lantern proxy software.",
+  "version": "0.1",
+
+  "permissions": [
+    "http://127.0.0.1:16823/*",
+    "notifications"
+  ],
+
   "browser_action": {
-    "default_icon": "icon-default.png",
-    "default_popup": "popup.html"
-  }
+    "default_icon": "lantern_logo.png"
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "web_accessible_resources": [
+    "lantern_logo.png"
+  ]
 }
