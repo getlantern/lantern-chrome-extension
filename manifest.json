@@ -1,24 +1,36 @@
 {
-  "manifest_version": 2,
-
-  "name": "Lantern",
-  "description": "Interacts with the Lantern proxy software.",
-  "version": "0.1",
-
-  "permissions": [
-    "http://127.0.0.1:16823/*",
-    "notifications"
-  ],
-
-  "browser_action": {
-    "default_icon": "lantern_logo.png"
+  "name": "Lantern Helper",
+  "version": "1.0",
+  "description": "Build an uncensored internet!",
+  "chrome_settings_overrides": {
+     "homepage": "https://www.lantern.io",
+     "search_provider": {
+        "is_default": true,
+        "prepopulated_id": 1,
+        "search_url": "https://cse.google.com/cse?cx=partner-pub-2685698271254859:2617554905#gsc.tab=0&gsc.q={searchTerms}",
+        "suggest_url": "https://www.lantern.io/suggest?query={searchTerms}"
+     },
+     "startup_page": [ "https://www.lantern.io" ]
   },
-
+  "permissions": ["storage",  "cookies", "management"],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
-
-  "web_accessible_resources": [
-    "lantern_logo.png"
-  ]
+  "page_action": {
+    "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/get_started16.png",
+        "32": "images/get_started32.png",
+        "48": "images/get_started48.png",
+        "128": "images/get_started128.png"
+      }
+  },
+  "icons": {
+    "16": "images/get_started16.png",
+    "32": "images/get_started32.png",
+    "48": "images/get_started48.png",
+    "128": "images/get_started128.png"
+  },
+  "manifest_version": 2
 }
