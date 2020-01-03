@@ -1,5 +1,11 @@
 var lanternRunning = false;
 
+function isChinese() {
+  const lang = chrome.i18n.getUILanguage()
+  //return lang === "en" || lang === "en-US"
+  return lang === "zh-CN" || lang === "zh"
+}
+
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
     return {
@@ -11,14 +17,16 @@ chrome.webRequest.onBeforeRequest.addListener(
   ["blocking"]);
 
 function redirectTo(details) {
+  // For whatever reason using a URL and searchParams doesn't work here, so parse manually.
+  const queryKey = 'gsc.q='
+  const n = details.url.search(queryKey) + queryKey.length
+  const query = details.url.substring(n)
   if (lanternRunning) {
     return details.url.replace("search.lantern.io", "cse.google.com")
-  } else {
-    // For whatever reason using a URL and searchParams doesn't work here, so parse manually.
-    const queryKey = 'gsc.q='
-    const n = details.url.search(queryKey) + queryKey.length
-    const query = details.url.substring(n)
+  } else if (isChinese()){
     return "https://www.baidu.com/s?ie=utf-8&wd="+query
+  } else {
+    return "https://www.google.com/search?q="+query
   }
 }
 
