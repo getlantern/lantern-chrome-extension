@@ -1,5 +1,3 @@
-var lanternRunning = false;
-
 function isChinese() {
   const lang = chrome.i18n.getUILanguage()
   //return lang === "en" || lang === "en-US"
@@ -21,7 +19,7 @@ function redirectTo(details) {
   const queryKey = 'gsc.q='
   const n = details.url.search(queryKey) + queryKey.length
   const query = details.url.substring(n)
-  if (lanternRunning) {
+  if (lanternRunning()) {
     return details.url.replace("search.lantern.io", "cse.google.com")
   } else if (isChinese()){
     return "https://www.baidu.com/s?ie=utf-8&wd="+query
@@ -38,6 +36,10 @@ function checkForMessages() {
   }
 }
 
+function lanternRunning() {
+  return ws !== null
+}
+
 function createWebSocket() {
   const url = chrome.runtime.getURL("settings.json");
   fetch(url)
@@ -45,7 +47,6 @@ function createWebSocket() {
     .then((json) => connect(json))
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
-      lanternRunning = false;
     });
 }
 
@@ -53,12 +54,11 @@ function connect(settings) {
   s = new WebSocket('ws://'+settings.uiAddr+'/'+settings.localHTTPToken+'/data');
   s.onerror = function(event){
     console.log("Error");
-    lanternRunning = false;
+    ws = null
   }
   s.onopen = function (event) {
     console.log("open");
     ws = s
-    lanternRunning = true;
   };
   s.onmessage = function (event) {
     console.log("got message from lantern:")
@@ -67,7 +67,6 @@ function connect(settings) {
   s.onclose = function() {
     // Just set the variable to null so it will be re-opened on the next pass.
     ws = null;
-    lanternRunning = false;
   };
 }
 
