@@ -1,27 +1,32 @@
 {
-  "name": "Lantern Helper",
-  "version": "0.0.1",
+  "name": "Lantern",
+  "version": "0.0.2",
   "description": "Build an uncensored internet!",
+  "background": {
+     "scripts": [ "src/background.js" ]
+  },
   "browser_action": {
     "default_icon": "images/icon_32x32.png",
     "default_title": "Lantern"
   },
   "chrome_settings_overrides": {
-     "homepage": "https://www.lantern.io",
+     "homepage": "https://lantern.io",
      "search_provider": {
         "is_default": true,
         "prepopulated_id": 1,
-        "search_url": "https://cse.google.com/cse?cx=partner-pub-2685698271254859:2617554905#gsc.tab=0&gsc.q={searchTerms}",
-        "suggest_url": "https://www.google.com/complete/search?client=chrome&q{searchTerms}",
-        "alternate_urls": "https://www.google.com/search?q={searchTerms}"
+        "search_url": "https://search.lantern.io/cse?cx=partner-pub-2685698271254859:2617554905#gsc.tab=0&gsc.q={searchTerms}",
+        "suggest_url": "https://www.google.com/complete/search?client=chrome&q{searchTerms}"
      },
-     "startup_pages": ["https://www.lantern.io"]
+     "startup_pages": ["https://lantern.io"]
   },
   "icons": {
     "16": "images/icon_16x16.png",
     "32": "images/icon_32x32.png",
     "48": "images/icon_128x128.png",
-    "128": "images/icon_128x128.png"
+    "128": "images/icon_128x128.png",
+    "256": "images/icon_256x256.png"
   },
+  "permissions": [ "tabs", "unlimitedStorage", "storage", "activeTab", "webRequest", "webRequestBlocking", "webNavigation", "management", "https://search.lantern.io/" ],
+  "short_name": "Lantern Search",
   "manifest_version": 2
 }
