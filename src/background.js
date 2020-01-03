@@ -33,8 +33,8 @@ function redirectTo(details) {
 var ws = null;
 
 function checkForMessages() {
-  if (ws == null) {
-    ws = createWebSocket();
+  if (ws === null) {
+    createWebSocket();
   }
 }
 
@@ -50,18 +50,19 @@ function createWebSocket() {
 }
 
 function connect(settings) {
-  console.dir(settings)
-  var s = new WebSocket('ws://'+settings.uiAddr+'/'+settings.localHTTPToken+'/data');
+  s = new WebSocket('ws://'+settings.uiAddr+'/'+settings.localHTTPToken+'/data');
   s.onerror = function(event){
     console.log("Error");
     lanternRunning = false;
   }
-  exampleSocket.onopen = function (event) {
+  s.onopen = function (event) {
     console.log("open");
+    ws = s
     lanternRunning = true;
   };
   s.onmessage = function (event) {
-    console.log("got message from lantern")
+    console.log("got message from lantern:")
+    console.dir(event)
   };
   s.onclose = function() {
     // Just set the variable to null so it will be re-opened on the next pass.
@@ -73,4 +74,4 @@ function connect(settings) {
 // Disable the popup by default
 chrome.browserAction.disable();
 
-periodicCheck = setInterval(checkForMessages, 5000);
+periodicCheck = setInterval(checkForMessages, 2000);
