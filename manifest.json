@@ -1,5 +1,5 @@
 {
-  "name": "Lantern",
+  "name": "Lantern Private Search",
   "version": "0.0.2",
   "description": "Build an uncensored internet!",
   "background": {
@@ -26,7 +26,7 @@
     "128": "images/icon_128x128.png",
     "256": "images/icon_256x256.png"
   },
-  "permissions": [ "tabs", "unlimitedStorage", "storage", "activeTab", "webRequest", "webRequestBlocking", "webNavigation", "management", "https://search.lantern.io/" ],
-  "short_name": "Lantern Search",
+  "permissions": [ "webRequest", "webRequestBlocking", "https://search.lantern.io/" ],
+  "short_name": "Lantern Private Search",
   "manifest_version": 2
 }

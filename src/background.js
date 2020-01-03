@@ -19,7 +19,7 @@ function redirectTo(details) {
   const queryKey = 'gsc.q='
   const n = details.url.search(queryKey) + queryKey.length
   const query = details.url.substring(n)
-  if (lanternRunning()) {
+  if (lanternConnected()) {
     return details.url.replace("search.lantern.io", "cse.google.com")
   } else if (isChinese()){
     return "https://www.baidu.com/s?ie=utf-8&wd="+query
@@ -36,8 +36,9 @@ function checkForMessages() {
   }
 }
 
-function lanternRunning() {
-  return ws !== null
+var hasProxy = false
+function lanternConnected() {
+  return hasProxy
 }
 
 function createWebSocket() {
@@ -54,20 +55,30 @@ function connect(settings) {
   s = new WebSocket('ws://'+settings.uiAddr+'/'+settings.localHTTPToken+'/data');
   s.onerror = function(event){
     console.log("Error");
-    ws = null
+    lanternError();
   }
   s.onopen = function (event) {
     console.log("open");
     ws = s
   };
   s.onmessage = function (event) {
-    console.log("got message from lantern:")
-    console.dir(event)
+    console.log("got message from lantern")
+    const dataJson = JSON.parse(event.data)
+    const msg = dataJson.message
+    if (dataJson.type === "stats" && "hasSucceedingProxy" in msg) {
+      console.log("Lantern has hasSucceedingProxy: "+msg.hasSucceedingProxy)
+      hasProxy = msg.hasSucceedingProxy
+    }
   };
   s.onclose = function() {
-    // Just set the variable to null so it will be re-opened on the next pass.
-    ws = null;
+    lanternError()
   };
+}
+
+function lanternError() {
+  // Set the websocket to null so it will be re-opened on the next pass.
+  ws = null;
+  hasProxy = false;
 }
 
 // Disable the popup by default
