@@ -53,25 +53,24 @@ function createWebSocket() {
 
 function connect(settings) {
   s = new WebSocket('ws://'+settings.uiAddr+'/'+settings.localHTTPToken+'/data');
-  s.onerror = function(event){
-    console.log("Error");
+  s.onerror = function(event) {
     lanternError();
   }
   s.onopen = function (event) {
     console.log("open");
-    ws = s
+    ws = s;
   };
   s.onmessage = function (event) {
-    console.log("got message from lantern")
-    const dataJson = JSON.parse(event.data)
-    const msg = dataJson.message
-    if (dataJson.type === "stats" && "hasSucceedingProxy" in msg) {
+    console.log("got message from lantern");
+    const dataJson = JSON.parse(event.data);
+    const msg = dataJson.message;
+    if (dataJson.type === "stats" && msg  && msg.hasSucceedingProxy) {
       console.log("Lantern has hasSucceedingProxy: "+msg.hasSucceedingProxy)
       hasProxy = msg.hasSucceedingProxy
     }
   };
   s.onclose = function() {
-    lanternError()
+    lanternError();
   };
 }
 
@@ -81,7 +80,8 @@ function lanternError() {
   hasProxy = false;
 }
 
-// Disable the popup by default
-chrome.browserAction.disable();
+chrome.browserAction.onClicked.addListener(
+  () => chrome.tabs.create({url: 'https://lantern.io/'})
+);
 
 periodicCheck = setInterval(checkForMessages, 2000);
