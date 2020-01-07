@@ -3,30 +3,32 @@
   "version": "0.0.2",
   "description": "Build an uncensored internet!",
   "background": {
-     "scripts": [ "src/background.js" ]
+    "persistent": true,
+    "scripts": [ "src/background.js" ]
   },
   "browser_action": {
-    "default_icon": "images/icon_32x32.png",
+    "default_icon": "images/disconnected_32.png",
     "default_title": "Lantern"
   },
   "chrome_settings_overrides": {
-     "homepage": "https://lantern.io",
      "search_provider": {
+        "encoding": "UTF-8",
         "is_default": true,
-        "prepopulated_id": 1,
-        "search_url": "https://search.lantern.io/cse?cx=partner-pub-2685698271254859:2617554905#gsc.tab=0&gsc.q={searchTerms}",
-        "suggest_url": "https://www.google.com/complete/search?client=chrome&q{searchTerms}"
-     },
-     "startup_pages": ["https://lantern.io"]
+        "keyword": "lantern",
+        "name": "Lantern Search",
+        "favicon_url": "https://lantern.io/favicon.ico",
+        "search_url": "https://search.lantern.io/search?q={searchTerms}"
+     }
   },
   "icons": {
-    "16": "images/icon_16x16.png",
-    "32": "images/icon_32x32.png",
-    "48": "images/icon_128x128.png",
-    "128": "images/icon_128x128.png",
-    "256": "images/icon_256x256.png"
+    "16": "images/disconnected_16.png",
+    "32": "images/disconnected_32.png",
+    "64": "images/disconnected_64.png",
+    "128": "images/disconnected_128.png"
   },
-  "permissions": [ "webRequest", "webRequestBlocking", "https://search.lantern.io/" ],
+  "default_locale": "en",
+  "permissions": [ "webRequest", "webRequestBlocking", "https://*.lantern.io/" ],
+  "update_url": "https://clients2.google.com/service/update2/crx",
   "short_name": "Lantern Private Search",
   "manifest_version": 2
 }

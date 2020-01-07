@@ -1,3 +1,5 @@
+const DEBUG = false;
+
 function isChinese() {
   const lang = chrome.i18n.getUILanguage()
   //return lang === "en" || lang === "en-US"
@@ -16,14 +18,13 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 function redirectTo(details) {
   // For whatever reason using a URL and searchParams doesn't work here, so parse manually.
-  const queryKey = 'gsc.q='
+  const queryKey = 'q='
   const n = details.url.search(queryKey) + queryKey.length
   const query = details.url.substring(n)
-  if (lanternConnected()) {
-    return details.url.replace("search.lantern.io", "cse.google.com")
-  } else if (isChinese()){
+  if (isChinese()){
     return "https://www.baidu.com/s?ie=utf-8&wd="+query
   } else {
+    log("Lantern redirecting to google")
     return "https://www.google.com/search?q="+query
   }
 }
@@ -36,6 +37,7 @@ function checkForMessages() {
   }
 }
 
+var homepage = "https://lantern.io/"
 var hasProxy = false
 function lanternConnected() {
   return hasProxy
@@ -47,25 +49,31 @@ function createWebSocket() {
     .then((response) => response.json())
     .then((json) => connect(json))
     .catch(function(err) {
-      console.log('Fetch Error :-S', err);
+      log('Cannot find settings.json -- Lantern not running.', err);
     });
 }
 
 function connect(settings) {
-  s = new WebSocket('ws://'+settings.uiAddr+'/'+settings.localHTTPToken+'/data');
+  const path = settings.uiAddr+'/'+settings.localHTTPToken
+  s = new WebSocket('ws://'+path+'/data');
   s.onerror = function(event) {
     lanternError();
   }
   s.onopen = function (event) {
-    console.log("open");
+    log("open");
     ws = s;
+    lanternRunning(path);
   };
   s.onmessage = function (event) {
-    console.log("got message from lantern");
+    log("got message from lantern");
     const dataJson = JSON.parse(event.data);
     const msg = dataJson.message;
-    if (dataJson.type === "stats" && msg  && msg.hasSucceedingProxy) {
-      console.log("Lantern has hasSucceedingProxy: "+msg.hasSucceedingProxy)
+    if (dataJson.type === "stats" && msg && msg.hasSucceedingProxy) {
+      log("Lantern has hasSucceedingProxy: "+msg.hasSucceedingProxy)
+      hasProxy = msg.hasSucceedingProxy
+    }
+    else if (dataJson.type === "settings" && msg && msg.hasSucceedingProxy) {
+      log("Lantern has hasSucceedingProxy: "+msg.hasSucceedingProxy)
       hasProxy = msg.hasSucceedingProxy
     }
   };
@@ -74,14 +82,41 @@ function connect(settings) {
   };
 }
 
+function lanternRunning(path) {
+  homepage = "http://"+path
+  chrome.browserAction.setIcon({
+    path : {
+      "16": "images/connected_16.png",
+      "32": "images/connected_32.png",
+      "64": "images/connected_64.png",
+      "128": "images/connected_128.png"
+    }
+  });
+}
+
 function lanternError() {
   // Set the websocket to null so it will be re-opened on the next pass.
+  homepage = "https://lantern.io/"
   ws = null;
   hasProxy = false;
+  chrome.browserAction.setIcon({
+    path : {
+      "16": "images/disconnected_16.png",
+      "32": "images/disconnected_32.png",
+      "64": "images/disconnected_64.png",
+      "128": "images/disconnected_128.png"
+    }
+  });
 }
 
 chrome.browserAction.onClicked.addListener(
-  () => chrome.tabs.create({url: 'https://lantern.io/'})
+  () => chrome.tabs.create({url: homepage})
 );
+
+function log(msg) {
+  if (DEBUG) {
+    console.log(msg);
+  }
+}
 
 periodicCheck = setInterval(checkForMessages, 2000);

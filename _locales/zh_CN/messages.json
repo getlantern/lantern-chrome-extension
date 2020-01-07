@@ -1,0 +1,14 @@
+{
+   "extensionDescription": {
+      "description": "Description of the extension.",
+      "message": "Make your searches private with Lantern."
+   },
+   "extensionName": {
+      "description": "Name of the extension.",
+      "message": "Lantern Private Search Engine"
+   },
+   "searchEngineName": {
+      "description": "Search Engine Name",
+      "message": "Lantern Private Search"
+   }
+}
