@@ -55,7 +55,7 @@ function createWebSocket() {
 
 function connect(settings) {
   const path = settings.uiAddr+'/'+settings.localHTTPToken
-  s = new WebSocket('ws://'+path+'/data');
+  var s = new WebSocket('ws://'+path+'/data');
   s.onerror = function(event) {
     lanternError();
   }
