@@ -44,12 +44,12 @@ function lanternConnected() {
 }
 
 function createWebSocket() {
-  const url = chrome.runtime.getURL("settings.json");
+  const url = chrome.runtime.getURL("lantern-settings.json");
   fetch(url)
     .then((response) => response.json())
     .then((json) => connect(json))
     .catch(function(err) {
-      log('Cannot find settings.json -- Lantern not running.', err);
+      log('Cannot find lantern-settings.json -- Lantern not running.', err);
     });
 }
 
