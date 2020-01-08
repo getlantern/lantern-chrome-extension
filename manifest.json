@@ -1,5 +1,5 @@
 {
-  "name": "Lantern Private Search",
+  "name": "Lantern Search",
   "version": "0.0.2",
   "description": "Build an uncensored internet!",
   "background": {
@@ -15,7 +15,7 @@
         "encoding": "UTF-8",
         "is_default": true,
         "keyword": "lantern",
-        "name": "Lantern Search",
+        "name": "Lantern",
         "favicon_url": "https://lantern.io/favicon.ico",
         "search_url": "https://search.lantern.io/search?q={searchTerms}"
      }
@@ -29,6 +29,6 @@
   "default_locale": "en",
   "permissions": [ "webRequest", "webRequestBlocking", "https://*.lantern.io/" ],
   "update_url": "https://clients2.google.com/service/update2/crx",
-  "short_name": "Lantern Private Search",
+  "short_name": "Lantern Search",
   "manifest_version": 2
 }
