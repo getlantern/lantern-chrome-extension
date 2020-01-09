@@ -44,6 +44,8 @@ function lanternConnected() {
 }
 
 function createWebSocket() {
+  // We have to do this in fairly roundabout fashion because just loading a new file
+  // via a URL ends up marking the extension as corrupted.
   chrome.runtime.getPackageDirectoryEntry(function(directoryEntry) {
     const directoryReader = directoryEntry.createReader();
     directoryReader.readEntries(function(entries) {
@@ -79,7 +81,7 @@ function connect(settings) {
     return
   }
   const path = settings.uiAddr+'/'+settings.localHTTPToken
-  var s = new WebSocket('ws://'+path+'/data');
+  const s = new WebSocket('ws://'+path+'/data');
   s.onerror = function(event) {
     lanternError();
   }
