@@ -17,7 +17,7 @@
         "keyword": "lantern",
         "name": "Lantern",
         "favicon_url": "https://lantern.io/favicon.ico",
-        "search_url": "https://search.lantern.io/search?q={searchTerms}"
+        "search_url": "https://search.lantern.io/?q={searchTerms}"
      }
   },
   "icons": {

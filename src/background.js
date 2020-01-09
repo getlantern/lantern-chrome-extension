@@ -8,8 +8,10 @@ function isChinese() {
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
+    if (lanternConnected()) {
+      return {}
+    }
     return {
-      // If Lantern is running, we want to do something different here.
       redirectUrl: redirectTo(details)
     };
   },
@@ -24,7 +26,6 @@ function redirectTo(details) {
   if (isChinese()){
     return "https://www.baidu.com/s?ie=utf-8&wd="+query
   } else {
-    log("Lantern redirecting to google")
     return "https://www.google.com/search?q="+query
   }
 }
