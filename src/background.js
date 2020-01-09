@@ -1,4 +1,4 @@
-const DEBUG = false;
+const DEBUG = true;
 
 function isChinese() {
   const lang = chrome.i18n.getUILanguage()
@@ -44,16 +44,40 @@ function lanternConnected() {
 }
 
 function createWebSocket() {
-  const url = chrome.runtime.getURL("lantern-settings.json");
-  fetch(url)
-    .then((response) => response.json())
-    .then((json) => connect(json))
-    .catch(function(err) {
-      log('Cannot find lantern-settings.json -- Lantern not running.', err);
+  chrome.runtime.getPackageDirectoryEntry(function(directoryEntry) {
+    const directoryReader = directoryEntry.createReader();
+    directoryReader.readEntries(function(entries) {
+      for (var i = 0; i < entries.length; ++i) {
+        if (entries[i].name == "data") {
+          const dataDirReader = entries[i].createReader();
+          dataDirReader.readEntries(function(dataEntries) {
+            for (var i = 0; i < dataEntries.length; ++i) {
+              if (dataEntries[i].isFile === true) {
+                const fileEntry = dataEntries[i]
+                fileEntry.file(function(file) {
+                  const reader = new FileReader();
+                  reader.onload = function(e) {
+                    const settings = JSON.parse(e.target.result)
+                    connect(settings)
+                  };
+                  reader.readAsText(file)
+                })
+                return
+              }
+            }
+            log("no files in data dir")
+          });
+        }
+      }
     });
+  });
 }
 
 function connect(settings) {
+  if (!settings.uiAddr) {
+    log("No uiAddr in settings");
+    return
+  }
   const path = settings.uiAddr+'/'+settings.localHTTPToken
   var s = new WebSocket('ws://'+path+'/data');
   s.onerror = function(event) {
@@ -119,4 +143,4 @@ function log(msg) {
   }
 }
 
-periodicCheck = setInterval(checkForMessages, 2000);
+setInterval(checkForMessages, 2000);
