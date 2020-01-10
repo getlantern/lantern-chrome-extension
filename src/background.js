@@ -115,8 +115,8 @@ function createWebSocket() {
             try {
               const settings = JSON.parse(e.target.result)
               connect(settings)
-            } catch(e) {
-              log(`error parsing JSON from ${file.name}: ${e}`)
+            } catch (exc) {
+              log(`error parsing JSON from ${file.name}: ${exc}`)
             }
           }
           reader.readAsText(file)
