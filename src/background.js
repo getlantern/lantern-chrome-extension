@@ -103,7 +103,8 @@ function createWebSocket() {
       }
       const dataDirReader = entry.createReader()
       dataDirReader.readEntries((dataEntries) => {
-        const fileEntry = dataEntries.find((e) => e.isFile && e.name === 'settings.json')
+        // This requires that there's only one file in the data directory
+        const fileEntry = dataEntries.find((e) => e.isFile)
         if (typeof fileEntry === 'undefined') {
           log('no files in data directory')
           return
@@ -111,8 +112,12 @@ function createWebSocket() {
         fileEntry.file((file) => {
           const reader = new FileReader()
           reader.onload = (e) => {
-            const settings = JSON.parse(e.target.result)
-            connect(settings)
+            try {
+              const settings = JSON.parse(e.target.result)
+              connect(settings)
+            } catch(e) {
+              log(`error parsing JSON from ${file.name}: ${e}`)
+            }
           }
           reader.readAsText(file)
         })
