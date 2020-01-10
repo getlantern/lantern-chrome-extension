@@ -2,3 +2,4 @@
 *.sw[po]
 *.un~
 *.*~
+node_modules
