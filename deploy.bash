@@ -14,7 +14,7 @@ VERSION=$1
 function bumpManifestVersion() {
   perl -pi -e "s|version\\\": \\\"\d+\.\d+\.\d+\\\"|version\\\": \\\"$VERSION\\\"|g"  manifest.json || die "Could not set version"
   git add manifest.json || die "Could not add manifest to git"
-  git commit -m "bumped manifes version to $VERSION" || die "Could not commit new manifest version"
+  git commit -m "bumped manifest version to $VERSION" || die "Could not commit new manifest version"
   git push origin master || die "Could not push to master"
 }
 
