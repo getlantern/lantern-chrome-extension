@@ -23,3 +23,9 @@ $ LANTERN_CHROME_EXTENSION="/Users/me/lantern/lantern-chrome-extension/data" ./l
 where `/Users/me/lantern/lantern-chrome-extension` represents the path to this repo
 
 Otherwise, if you've installed this extension from google, you can start lantern in the normal way.
+
+## Deploy
+Run `./deploy.bash`. That will generate a new zip file and will open the developer console
+where you have to manually upload the new `lantern.zip` file. It opens the browser to:
+
+https://chrome.google.com/u/1/webstore/devconsole/g03333245238207858850/akppoapgnchinmnbinihafkogdohpbmk/edit/package?hl=en
